@@ -1,37 +1,24 @@
 #include<iostream>
 #include<string>
+#include<vector>
+
+using namespace std;
 
 class robopart {
-	public:
-		int number;
-		double cost,weight;
-		string description;
-		string name;
-		string type;
-
-	//	int rval(string ptype) { if (type == ptype) return 1; };
-};
-
-/*class Torso {
-private:
-	int value = 0;
-	string name = "torso";
 public:
-	void check() {
-		p
-		if(value == 1)
-	};
-	
+	vector <int> number;
+	vector <double> cost, weight;
+	vector <string> description, name;
+    int i = 0;
+	void inc() { i++; };
 };
-class Head {
 
+class robomodel {
+public:
+	vector <double> cost;
+	vector <string> name;
+	vector <int> number;
 };
-class locomotor {
 
-};
-class arm {
 
-};
-class battery {
 
-};*/
