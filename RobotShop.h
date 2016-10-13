@@ -46,8 +46,7 @@ class robomodel {
 		vector <int> number;
 		vector <double> sellingprice;
 		vector <double> shippingprice;
-		int i;
-		double total;
+		int i,total;
 	public:
 
 		void print() {
@@ -84,20 +83,21 @@ class robomodel {
 
 class unapproved {
 	private:
-		vector <string> name, date, model;
+		vector <string> name, date, model, status;
 		vector <double> price;
 		int i,inc;
 	public:
-		void store(string nam, double p, string d, string m) {
+		void store(string stat,string nam, double p, string d, string m) {
 			name.push_back(nam);
 			price.push_back(p);
 			date.push_back(d);
 			model.push_back(m);
+			status.push_back(stat);
 		};
 		void print() {
 			cout << "\n";
 			for (i = 0; i < name.size(); i++)
-					cout << i << " " << name[i] << ", " << model[i] << ", " << price[i] << ", " << date[i] << "\n";
+					cout << i << ", Status: " << status[i] << ", " << name[i] << ", " << model[i] << ", " << price[i] << ", " << date[i] << "\n";
 			cout << "\n";
 		}
 		int search(string nam){
@@ -106,11 +106,32 @@ class unapproved {
 			{
 				if (nam == name[i])
 				{
-					cout << i << " " << name[i] << ", " << model[i] << ", " << price[i] << ", " << date[i] << "\n";
+					cout << i << ", Status: " << status[i] << ", " << name[i] << ", " << model[i] << ", " << price[i] << ", " << date[i] << "\n";
 					inc++;
 				}
 			}
 			return inc;
+		}
+		void printpend() {
+			inc = 0;
+			for (i = 0; i < name.size(); i++)
+			{
+				if ("Order Pending" == status[i])
+				{
+					cout << i << ", Status: Pending, " << name[i] << ", " << model[i] << ", " << price[i] << ", " << date[i] << "\n";
+					inc++;
+				}
+			}
+			return;
+		}
+
+		void statchange(int line) {
+			i = 0;
+			while (i < line)
+				i++;
+			status[i] = "Model Ordered";
+			cout << "Model has been ordered for " << name[i] << "!\n";
+			return;
 		}
 };
 

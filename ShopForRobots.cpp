@@ -22,6 +22,7 @@ void sa();
 
 int main()
 {
+	cout << "THIS IS A TEST\n";
 	preparts();
 	menu();
     return 0;
@@ -194,7 +195,7 @@ void bc()
 {
 	int decision;
 	double total;
-	string name, date, modname;
+	string name, date, modname, status = "Order Pending";
 	cout << "\n\n~~~Welcome Customers!~~~\n1 - View Models\n2 - View Orders\n";
 	cin >> decision;
 	if (decision == 1)
@@ -209,7 +210,7 @@ void bc()
 		cout << "Enter the date: ";
 		cin >> date;
 		total = model.purchase(decision);
-		pending.store(name,total,date,modname);
+		pending.store(status,name,total,date,modname);
 		cout << "Thank you for your purchase! Our Next available Sales Associate will order your model right away!\n";
 		menu();
 	}
@@ -318,9 +319,11 @@ void sa() {
 	getline(cin,salesname);
 	
 	cout << "Welcome!\n";
-		pending.print();
+		pending.printpend();
 	
 		cout << "Which person would you like to Assist: ";
 		cin >> test;
+		pending.statchange(test);
+		menu();
 }
 
