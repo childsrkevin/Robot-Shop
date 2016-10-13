@@ -46,7 +46,8 @@ class robomodel {
 		vector <int> number;
 		vector <double> sellingprice;
 		vector <double> shippingprice;
-		int i,total;
+		int i;
+		double total;
 	public:
 
 		void print() {
