@@ -8,31 +8,23 @@ using namespace std;
 
 robopart t, a, h, l, b;
 robomodel model;
+unapproved pending;
 
 void menu();
 void pm();
 void printlist();
 void newPart();
-void printB();
-void printA();
-void printH();
-void printL();
-void printT();
 void remove();
-void removeline(int line,string type);
 void bc();
 void preparts();
 void assemble();
-void printM();
+void sa();
 
 int main()
 {
-	int wait;
 	preparts();
 	menu();
-	//cin >> wait;
     return 0;
-
 }
 
 void menu()
@@ -51,11 +43,11 @@ void menu()
 	}
 	else if (value == 2)
 	{
-
+		bc();
 	}
 	else if (value == 3)
 	{
-
+		sa();
 	}
 	else if (value == 4)
 	{
@@ -68,77 +60,52 @@ void menu()
 }
 
 	void pm()
-		//Need to be able to create new instances of robot components in the system
-		//For each component: Name, Part Number, type(torso, head, arm, locomotor, battery),
-		//weight, cost and descprition
 	{
 		int value;
 		cout << "\n\n~~~~Product Manager~~~~\n0 - Create new Model\n1 - Create new Part\n2 - Remove\n3 - Print all parts\n4 - Print all Models\n5 - Main Menu\n6 - QUIT\n";
 		cin >> value;
 		if (value == 0)
-		{
 			assemble();
-			pm();
-		}
-		if (value == 1)
-		{
+		else if (value == 1)
 			newPart();
-			pm();
-		}
 		else if (value == 2)
-		{
 			remove();
-			pm();
-		}
 		else if (value == 3)
-		{
-			printlist(/*totalparts.csv"*/);
-			pm();
-		}
+			printlist();
 		else if (value == 4)
-		{
-			printM();
-		}
+			model.print();
 		else if (value == 5)
 			menu();
 		else if (value == 6)
 			return;
 
-
+		pm();
 }
 
 
 void printlist()
 {
 	int value;
-	/*int i = 0;
-	cout << "\n\n~~~~List of Parts~~~~\n";
-	ifstream inputfile(file);
-	string line;
-	while (getline(inputfile, line))
-	{
-		std::istringstream iss(line);
-		cout << i++ << " - " << line << "\n";
-	}*/
 	cout << "\n\n~~~~Print Menu~~~~\n1 - Head\n2 - Battery\n3 - Arm\n4 - Locomotor\n5 - Torso\n6 - All Parts\n";
 	cin >> value;
+	cout << "\n\n";
 	if (value == 1)
-		printH();
+		h.print();
 	else if (value == 2)
-		printB();
+		b.print();
 	else if (value == 3)
-		printA();
+		a.print();
 	else if (value == 4)
-		printL();
+		l.print();
 	else if (value == 5)
-		printT();
+		t.print();
 	else if (value == 6)
 	{
-		printA();
-		printB();
-		printH();
-		printL();
-		printT();
+		h.print();
+		b.print();
+		a.print();
+		l.print();
+		t.print();
 	}
 
 	return;
@@ -146,14 +113,9 @@ void printlist()
 
 void newPart()
 {
-	ofstream outputfile;
-	//append
 	string name, description, type;
 	int number;
 	double cost, weight;
-
-	//ofstream outputfile;
-	//outputfile.open("totalparts.csv", std::ios_base::app);
 
 	cin.ignore();
 	cout << "Enter a name for the part: ";
@@ -170,101 +132,20 @@ void newPart()
 	cout << "Breif Description: ";
 	getline(cin, description);
 
-
-	//outputfile << name << "," << number << "," << type << "," << weight << "," << cost << "," << description << endl;
-	cout << "New Part Added!\n";
-
-	//outputfile.close();
-
 	if (type == "torso")
-	{
-		t.name.push_back(name);
-		t.number.push_back(number);
-		t.weight.push_back(weight);
-		t.cost.push_back(cost);
-		t.description.push_back(description);
-		t.inc();
-	}
+		t.store(name,number,weight,cost,description);
 	else if (type == "arm" || type == "Arm")
-	{
-		a.name.push_back(name);
-		a.number.push_back(number);
-		a.weight.push_back(weight);
-		a.cost.push_back(cost);
-		a.description.push_back(description);
-		a.inc();
-	}
+		a.store(name, number, weight, cost, description);
 	else if (type == "head" || type == "Head")
-	{
-		//outputfile.open("head.csv", std::ios_base::app);
-		h.name.push_back(name);
-		h.number.push_back(number);
-		h.weight.push_back(weight);
-		h.cost.push_back(cost);
-		h.description.push_back(description);
-		//outputfile << "Battery, " << b.name[h.i] << ", " << b.number[h.i] << ", " << b.weight[h.i] << ", " << b.cost[h.i] << ", " << b.description[h.i] << "\n";
-		h.inc();
-	}
+		t.store(name, number, weight, cost, description);
 	else if (type == "battery" || type == "Battery")
-	{
-		
-		//outputfile.open("battery.csv", std::ios_base::app);
-
-		b.name.push_back(name);
-		b.number.push_back(number);
-		b.weight.push_back(weight);
-		b.cost.push_back(cost);
-		b.description.push_back(description);
-		//outputfile << "Battery, " << b.name[b.i] << ", " << b.number[b.i] << ", " << b.weight[b.i] << ", " << b.cost[b.i] << ", " << b.description[b.i] << "\n";
-		b.inc();
-
-		//outputfile.close();
-	}
+		t.store(name, number, weight, cost, description);
 	else if (type == "locomotor" || type == "Locomotor")
-	{
-		l.name.push_back(name);
-		l.number.push_back(number);
-		l.weight.push_back(weight);
-		l.cost.push_back(cost);
-		l.description.push_back(description);
-		l.inc();
-	}
+		t.store(name, number, weight, cost, description);
+
+	cout << "New Part Added!\n";
 }
 
-void printB() {
-	cout << "\n~~List of All Batteries~~\n";
-	for (int i = 0; i < b.number.size(); i++)
-		if(b.name[i] != "0")
-		cout << i << " - Battery, " << b.name[i] << ", " << b.number[i] << ", " << b.weight[i] << ", " << b.cost[i] << ", " << b.description[i] << "\n";
-		
-}
-void printT() {
-	cout << "\n~~List of All Torsos~~\n";
-	for (int i = 0; i<t.number.size(); i++)
-		if (t.name[i] != "0")
-		cout << i << " - Torso, " << t.name[i] << ", " << t.number[i] << ", " << t.weight[i] << ", " << t.cost[i] << ", " << t.description[i] << "\n";
-}
-
-void printH() {
-	cout << "\n~~List of All Heads~~\n";
-	for (int i = 0; i<h.number.size(); i++)
-		if (h.name[i] != "0")
-		cout << i << " - Head, " << h.name[i] << ", " << h.number[i] << ", " << h.weight[i] << ", " << h.cost[i] << ", " << h.description[i] << "\n";
-}
-
-void printL() {
-	cout << "\n~~List of All Locomotors~~\n";
-	for (int i = 0; i<l.number.size(); i++)
-		if (l.name[i] != "0")
-		cout << i <<" - Locomotor, " << l.name[i] << ", " << l.number[i] << ", " << l.weight[i] << ", " << l.cost[i] << ", " << l.description[i] << "\n";
-}
-
-void printA() {
-	cout << "\n\n~~List of All Arms~~\n";
-	for (int i = 0; i<a.number.size(); i++)
-		if (a.name[i] != "0")
-		cout << i << " - Arm, " << a.name[i] << ", " << a.number[i] << ", " << a.weight[i] << ", " << a.cost[i] << ", " << a.description[i] << "\n";
-}
 
 void remove() {
 	int value;
@@ -273,199 +154,173 @@ void remove() {
 
 	if (value == 1)
 	{
-		printH();
+		h.print();
 		cout << "\n\nWhich part would you like to remove: ";
 		cin >> value;
-		removeline(value, "head");
-        
+		h.removeline(value);       
 	}
 	else if (value == 2)
 	{
-		printB();
+		b.print();
 		cout << "\n\nWhich part would you like to remove: ";
 		cin >> value;
-		removeline(value,"battery");
+		b.removeline(value);
 	}
 	else if (value == 3)
 	{
-		printA();
+		a.print();
 		cout << "\n\nWhich part would you like to remove: ";
 		cin >> value;
-		removeline(value, "arm");
+		a.removeline(value);
 	}
 	else if (value == 4)
 	{
-		printL();
+		l.print();
 		cout << "\n\nWhich part would you like to remove: ";
 		cin >> value;
-		removeline(value, "locomotor");
+		l.removeline(value);
 	}
 	else if (value == 5)
 	{ 
-		printT();
+		t.print();
 		cout << "\n\nWhich part would you like to remove: ";
 		cin >> value;
-		removeline(value, "torso");
+		t.removeline(value);
 	}
 }
 
-void removeline(int line, string type)
-{
-	int i = 0;
-	while (i < line)
-		i++;
-	if(type == "battery")
-	    b.name[i] = "0";
-	else if (type == "torso")
-		t.name[i] = "0";
-	else if (type == "locomotor")
-		l.name[i] = "0";
-	else if (type == "head")
-		h.name[i] = "0";
-	else if (type == "arm")
-		a.name[i] = "0";
-
-	cout << type << "number: " << line << " has been removed!\n";
-}
 
 void bc()
 {
-    
+	int decision;
+	double total;
+	string name, date, modname;
+	cout << "\n\n~~~Welcome Customers!~~~\n1 - View Models\n2 - View Orders\n";
+	cin >> decision;
+	if (decision == 1)
+	{
+		model.print();
+		cout << "\n Which product would you like to buy?";
+		cin >> decision;
+		modname = model.decision(decision);
+		cout << "For our Records...\nEnter Customers Name: ";
+		cin.ignore();
+		getline(cin,name);
+		cout << "Enter the date: ";
+		cin >> date;
+		total = model.purchase(decision);
+		pending.store(name,total,date,modname);
+		cout << "Thank you for your purchase! Our Next available Sales Associate will order your model right away!\n";
+		menu();
+	}
+	else if (decision == 2)
+	{
+		int value;
+		string name;
+		cout << "Please Enter Your Name: ";
+		cin.ignore();
+		getline(cin, name);
+		value = pending.search(name);
+		cout << value << " orders found!\n";
+		menu();
+	}
 }
 
 void preparts()
 {
-	l.name.push_back("locomotor1");
-	l.number.push_back(1);
-	l.weight.push_back(43.7);
-	l.cost.push_back(120.5);
-	l.description.push_back("This is locomotor1");
-	l.inc();
-	
-	l.name.push_back("locomotor2");
-	l.number.push_back(2);
-	l.weight.push_back(34.2);
-	l.cost.push_back(134.7);
-	l.description.push_back("This is locomotor2");
-	l.inc();
+	l.store("locomotor1",1,43.7,120.5,"This is locomotor1");
+	l.store("locomotor2", 2, 34.2, 134.7, "This is locomotor2");
+	l.store("locomotor3", 3, 72.9, 78.9, "This is locomotor3");
 
-	l.name.push_back("locomotor3");
-	l.number.push_back(3);
-	l.weight.push_back(72.9);
-	l.cost.push_back(78.9);
-	l.description.push_back("This is locomotor3");
-	l.inc();
+	b.store("AA", 123, 2.3, 5.3, "This is a AA battery");
+	b.store("AAA", 122, 2.1, 5.3, "This is a AAA battery");
 
+	t.store("Expensive Torso", 12345, 109.5, 300.8, "The higher priced torso");
+	t.store("Value Torso", 1234, 89.4, 160.3, "The value priced torso");
 
-	b.name.push_back("AA");
-	b.number.push_back(123);
-	b.weight.push_back(2.3);
-	b.cost.push_back(5.3);
-	b.description.push_back("This is a AA battery");
-	b.inc();
+	a.store("Left Arm", 12332, 46.3, 78.2, "This is the left arm");
+	a.store("Right Arm", 12333, 46.3, 78.2, "This is the right arm");
 
-	b.name.push_back("AAA");
-	b.number.push_back(122);
-	b.weight.push_back(2.1);
-	b.cost.push_back(5.3);
-	b.description.push_back("This is a AAA battery");
-	b.inc();
+	h.store("Value Head", 1236, 32.2, 89.2, "This is the value head");
+	h.store("Expensive Head", 1238, 32.2, 160.2, "This is the expensive head");	
 
-	t.name.push_back("Expensive Torso");
-	t.number.push_back(12345);
-	t.weight.push_back(109.5);
-	t.cost.push_back(300.8);
-	t.description.push_back("This higher priced torso");
-	t.inc();
-
-	t.name.push_back("Value Torso");
-	t.number.push_back(1234);
-	t.weight.push_back(89.4);
-	t.cost.push_back(160.3);
-	t.description.push_back("This value priced torso");
-	t.inc();
-
-	a.name.push_back("Left Arm");
-	a.number.push_back(12332);
-	a.weight.push_back(46.3);
-	a.cost.push_back(78.2);
-	a.description.push_back("This the left arm");
-	a.inc();
-
-	a.name.push_back("Right Arm");
-	a.number.push_back(12333);
-	a.weight.push_back(46.3);
-	a.cost.push_back(78.2);
-	a.description.push_back("This the right arm");
-	a.inc();
-
-	h.name.push_back("Value Head");
-	h.number.push_back(1236);
-	h.weight.push_back(32.2);
-	h.cost.push_back(89.2);
-	h.description.push_back("This is the value head");
-	h.inc();
-
-	h.name.push_back("Expensive Head");
-	h.number.push_back(1238);
-	h.weight.push_back(32.2);
-	h.cost.push_back(160.2);
-	h.description.push_back("This is the expensive head");
-	h.inc();
+	model.store(800, "Kevin 2000", 123, 8.78, 1099.99,"This is a description");
+	model.store(1000, "Alex 3000", 1234, 8.78, 1299.99, "This is a description");
+	model.store(500, "CheapBot", 12345, 8.78, 799.99, "This is a description");
 }
 
 void assemble()
 {
-	
-	string modelname;
+	string modelname, description;
 	int value, modelnumber;
-	double cost = 0;
+	double cost = 0,get, sellingprice, shipping;
 	
 	cout << "Name of new robot model: ";
 	cin.ignore();
 	getline(cin,modelname);
-	printH();
+	h.print();
 	cout << "Pick a head for the new robot: ";
 	cin >> value;
-	cost = cost + h.cost[value];
+	get = h.gcost(value);
+	cost = cost + get;
 
-	printT();
+	t.print();
 	cout << "Pick a torso for the new robot: ";
 	cin >> value;
-	cost = cost + h.cost[value];
+	get = t.gcost(value);
+	cost = cost + get;
 
-	printA();
+	a.print();
 	cout << "Pick an arm for the new robot: ";
 	cin >> value;
-	cost = cost + h.cost[value];
+	get = a.gcost(value);
+	cost = cost + get;
 
-	printA();
+	a.print();
 	cout << "Pick another arm for the new robot: ";
 	cin >> value;
-	cost = cost + h.cost[value];
+	get = a.gcost(value);
+	cost = cost + get;
 
-	printL();
+	l.print();
 	cout << "Pick a locomotor for the new robot: ";
 	cin >> value;
-	cost = cost + h.cost[value];
+	get = l.gcost(value);
+	cost = cost + get;
 
-	printB();
+	b.print();
 	cout << "Pick batteries for the new robot: ";
 	cin >> value;
-	cost = cost + h.cost[value];
+	get = b.gcost(value);
+	cost = cost + get;
 
-	model.cost.push_back(cost);
-	model.name.push_back(modelname);
-	model.number.push_back(modelnumber);
+	cout << "\n\nModel Number: ";
+	cin >> modelnumber;
 
-	cout << modelname << " has been created and it cost $" << cost << " to make";
+	cout << "\n\n" << modelname << "Takes $" << cost << "to make\nSelling Price: ";
+	cin >> sellingprice;
 
+	cout << "\nShipping Cost: ";
+	cin >> shipping;
+
+	cout << "Description: ";
+	cin >> description;
+
+	model.store(cost,modelname,modelnumber,shipping,sellingprice, description);
+	cout << modelname << " has been created!\n";
 }
 
-void printM()
-{
-	cout << "\n~~List of All Models~~\n";
-	for (int i = 0; i < model.number.size(); i++)
-		if (model.name[i] != "0")
-			cout << model.name[i] << ", $" << model.cost[i] << ", Model Number: " << model.number[i] << "\n";
+void sa() {
+	string salesname;
+	int test;
+	cout << "Sales Associate Name: ";
+	cin.ignore();
+	getline(cin,salesname);
+	
+	cout << "Welcome!\n";
+		pending.print();
+	
+		cout << "Which person would you like to Assist: ";
+		cin >> test;
 }
+
