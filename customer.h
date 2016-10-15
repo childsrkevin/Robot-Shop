@@ -8,7 +8,7 @@
 
 using namespace std;
 
-class customer
+class Customer
 {
 public:
     void customer_menu();
