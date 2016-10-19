@@ -1,70 +1,42 @@
-#include <stdio.h>
-#include <iostream>
+#include "controller.h"
 #include "customer.h"
+#include "View.h"
+#include "Database.h"
+#include "Part.h"
+#include "PM.h"
+#include "SA.h"
+
+#include<iostream>
+#include<string>
+
+
 
 using namespace std;
 using std::string;
 using std::getline;
 
-string customer::input_name(string a)
+void customer::input_name1(string a)
 {
-    cout<<"Enter Your Name: "<<'\n';
-    getline(cin,a);
-    return a;
+    name.push_back(a);
+    number_customers ++;
+}
+int customer::login(string input)
+{
+    for(int i=0;i<name.size();i++)
+    {
+        if(input==name[i])
+        {
+            return 1;
+        }
+    }
+    return 0;
 }
 void customer::print_menu2()
 {
-    cout<<"Enter Designated Number From Menu"<<'\n';
+    cout<<"\nEnter Designated Number From Menu"<<'\n';
     cout<<"1) View catalog of robots"<<'\n';
     cout<<"2) View Order"<<'\n';
-    cout<<"3) View Outstanding Bill"<<'\n';
     cout<<"0) To Return To Main Menu"<<'\n';
-}
-
-void customer::customer_menu()
-{
-    int x;
-    string input,a = "";
-    
-    cout<<"Enter Designated Number From Menu"<<'\n';
-    cout<<"1) If You Are a New Customer"<<'\n';
-    cout<<"2) If You Are a Returning Customer"<<'\n';
-    cout<<"0) To Return To Main Menu"<<'\n';
-    cin>> x;
-    if(x==1)
-    {
-        input = input_name(a);
-        name.push_back(input);
-        number_customers ++;
-    }
-    else if(x==2)
-    {
-        cout<<"Enter your name"<<'\n';
-        getline(cin,a);
-        for(int i=0;i<number_customers;i++)
-        {
-            if(name[i] == a)
-            {
-                while(x!=0)
-                {
-                    print_menu2();
-                    cin>> x;
-                    if(x==1)
-                    {
-                        
-                    }
-                    else if(x==2)
-                    {
-                        
-                    }
-                    else if(x==3)
-                    {
-                        
-                    }
-                }
-            }
-        }
-    }
 }
 
 

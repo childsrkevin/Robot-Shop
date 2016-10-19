@@ -1,60 +1,66 @@
-#include"PM.h"
-#include"View.h"
-#include "Database.h"
-#include "Part.h" 
-#include "Controller.h"  
-#include <iostream>
-#include <string>
-
+#include "PM.h"
+#include"Robotpart.h"
+#include<iostream>
+#include<string>
+#include<vector>
 using namespace std;
-void PM :: pm_menu()
-{
-    int cmd;
-    cout << endl << endl;
-    cout << "====================" << endl;
-    cout << "Product Manager Menu" << endl;
-    cout << "====================" << endl;
-    cout << endl;
-    cout << "(1) Create a Part" << endl;
-    cout << "(2) Print all Parts" << endl;
 
-    cout << "Command?";
-    cin >> cmd;
+void PM::printmodels()
+{
+    part.printmodel();
+}
+vector<string> PM::return_mod_name()
+{
+    return part.return_model_name();
+}
+vector<double> PM::return_mod_price()
+{
+    return part.return_model_price();
+}
+vector<double> PM::return_mod_totalcost()
+{
+    return part.return_mod_totalcost();
+}
+void PM :: menu()
+{
+    int decision = -1;
+    cout << "\n=====Product Manager Menu=====" << endl;
+    
+    cout << "1) Create a Part" << endl;
+    cout << "2) Remove a Part" << endl;
+    cout << "3) Create a Model" << endl;
+    cout << "4) Remove a Model" << endl;
+    cout << "5) Print All Parts" << endl;
+    cout << "6) Print All Models" << endl;
+    cout << "0) Main Menu" << endl;
+    
+    cout << "\nAction?" << endl;
+    
+    cin >> decision;
     cin.ignore();
-    pm_cmd(cmd);
+    if(decision == 1)
+        part.create();
+    else if(decision == 2)
+        part.remove();
+    else if(decision == 3)
+        part.createmodel();
+    else if(decision == 4)
+        part.removemodel();
+    else if(decision == 5)
+        part.print();
+    else if(decision == 6)
+        part.printmodel();
+    else if(decision == 0)
+        return;
+    else if(decision == 8)
+        part.givedata();
+    else
+    {
+        cerr << "\n**Invalid command**\n" << endl;
+    }
+    
 }
 
-Part PM :: pm_cmd(int cmd)
-{
-    if(cmd == 1)
-    {
-        string type, name, description;
-        int number;
-        double cost, weight;
-
-         cout << "Type? ";
-         getline(cin, type);
-
-         cout <<  "Name? ";
-         getline(cin, name);
-
-         cout << "Description? ";
-         getline(cin, description);
-
-         cout << "Part Number? ";
-         cin >> number;
-         cin.ignore();
-
-         cout << "Cost? ";
-         cin >> cost;
-         cin.ignore();
-
-         cout << "Weight in Pounds? ";
-         cin >> weight;
-         cin.ignore();
-
-        return Part(type, description, name, number, cost, weight);
-    }
-    //if(cmd == 2)
-      //  controller.view.list_parts();
+Robotpart PM :: getpart(){
+    return part;
 }
