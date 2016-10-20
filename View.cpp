@@ -16,8 +16,6 @@ void View::show_menu()
     cout << "(3) Sales Associate" << endl;
     cout << "(4) Pointed-Haired Boss" << endl;
     cout << "(0) Exit" << endl;
-    
-    
 }
 void View::sales_menu()
 {

@@ -2,7 +2,6 @@
 #include "customer.h"
 #include "View.h"
 #include "Database.h"
-#include "Part.h"
 #include "PM.h"
 #include "SA.h"
 

@@ -6,9 +6,15 @@
 #include "customer.h"
 #include "SA.h"
 #include "boss.h"
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
 
 
-class Controller {
+class Controller
+{
 public:
     Controller(Database& data) : database(data), view(View(database)) {}
     void cli();
@@ -21,4 +27,4 @@ private:
     SA s;
     View view;
 };
-#endif
+#endif /* _CONTROLLER_H */

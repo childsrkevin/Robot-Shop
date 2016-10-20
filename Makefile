@@ -1,8 +1,5 @@
-output: PM.o Database.o Part.o View.o SA.o customer.o Arm.o Head.o Battery.o Locomotor.o Torso.o boss.o contoller.o Robotpart.o main.o
-	g++ Database.o Part.o PM.o View.o SA.o customer.o Arm.o Head.o Battery.o Locomotor.o Torso.o boss.o contoller.o Robotpart.o main.o -o output
-
-Part.o: Part.cpp Part.h
-	g++ -c Part.cpp
+output: PM.o Database.o View.o SA.o customer.o Arm.o Head.o Battery.o Locomotor.o Torso.o boss.o contoller.o Robotpart.o main.o
+	g++ Database.o PM.o View.o SA.o customer.o Arm.o Head.o Battery.o Locomotor.o Torso.o boss.o contoller.o Robotpart.o main.o -o output
 
 Robotpart.o: Robotpart.cpp Robotpart.h
 	g++ -c Robotpart.cpp

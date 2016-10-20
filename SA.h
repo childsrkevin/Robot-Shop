@@ -7,7 +7,6 @@
 #include"Database.h"
 #include "View.h"
 #include "controller.h"
-#include "Part.h"
 
 using namespace std;
 

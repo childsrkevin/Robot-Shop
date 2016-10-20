@@ -1,7 +1,6 @@
 #include"PM.h"
 #include"View.h"
 #include "Database.h"
-#include "Part.h"
 #include "controller.h"
 
 #include <stdio.h>

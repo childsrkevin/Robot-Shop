@@ -2,7 +2,6 @@
 #include "customer.h"
 #include "View.h"
 #include "Database.h"
-#include "Part.h"
 #include<iostream>
 #include<string>
 #include "PM.h"
@@ -11,7 +10,8 @@
 using namespace std;
 
 
-void Controller::cli(){
+void Controller::cli()
+{
     int cmd = -1;
     s.ez();
     while (cmd != 0)
