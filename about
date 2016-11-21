@@ -1,0 +1,15 @@
+Quit - Will Terminate The Program
+Undo - Will Delete the last thing written
+Cut - Will Delete text highlighted
+Copy - Will save a copy of what is highlighted
+Paste - Will write what was copied
+Create Order - Will create an order for a robot model
+Create Customer - Will create a customer
+Create Sales Associate -  Will create a sales associate
+Create Robot Part - Will Create a robot part in the robot shop
+Create Robot Model - Will create a model using created robot parts
+Report All Orders - Will Print all Orders created
+Report All Customers - Will Print all Customers created
+Report All Sales Associates - Will print all Sales Associates Created
+Report All Robot Models - Will print all Robot Models created
+Report All Robot Parts - Will print all Robot Parts created
