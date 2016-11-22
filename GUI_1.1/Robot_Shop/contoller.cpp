@@ -18,6 +18,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <string.h>
 //#include "shop.h"
 
 using namespace std;
@@ -30,13 +31,22 @@ void cancel_robot_partCB(Fl_Widget* w, void* p);
 void create_robot_modelCB(Fl_Widget* w, void* p);
 void cancel_robot_modelCB(Fl_Widget* w, void* p);
 void menu_create_robot_modelCB(Fl_Widget* w, void* p);
-//void create_custCB(Fl_Widget* w, void* p);
+void create_custCB(Fl_Widget* w, void* p);
 void cancel_custCB(Fl_Widget* w, void* p);
-//void create_saCB(Fl_Widget* w, void* p);
+void create_saCB(Fl_Widget* w, void* p);
 void cancel_saCB(Fl_Widget* w, void* p);
 int sales_View(Fl_Widget* w, void* p);
 int customer_View(Fl_Widget* w, void* p);
-
+int model_View(Fl_Widget* w, void* p);
+int part_View(Fl_Widget* w, void* p);
+int manual_View(Fl_Widget* w, void* p);
+int order_View(Fl_Widget* w, void* p);
+void menu_create_prepCB(Fl_Widget* w, void* p);
+void menu_create_orderCB(Fl_Widget* w, void* p);
+void create_orderCB(Fl_Widget* w, void* p);
+void cancel_orderCB(Fl_Widget* w, void* p);
+int order_View(Fl_Widget* w, void* p);
+void cancel_prepCB(Fl_Widget* w, void* p);
 
 
 class Robot_Part;
@@ -45,23 +55,41 @@ class Robot_Model;
 class Robot_Model_Dialog;
 class Customer_Dialog;
 class SalesAssociate_Dialog;
+class Order_Dialog;
+class Prep_Dialog;
+
 //shop shop;
 
 //
 // Widgets
 //
 
-Fl_Window *win,*custReports, *saReports,*models, *catalog, *order;
+Fl_Window *win,*custReports, *saReports,*models, *catalogi/*, *order*/;
 Fl_Menu_Bar *menubar;
 Fl_Box *box;
 Robot_Part_Dialog *robot_part_dlg; // The dialog of interest!
 Robot_Model_Dialog *robot_model_dlg;
 Customer_Dialog *cust_dlg;
 SalesAssociate_Dialog *sa_dlg;
+Order_Dialog *o_dlg;
+Prep_Dialog *p_dlg;
 
 //
 //Robot Part Class
 //
+
+
+class Order{
+public:
+    vector <string> name;
+    vector <string> number;
+    vector <string> date;
+    vector <string> saname;
+    vector <string> rname;
+    vector <string> cost;
+};
+
+Order o;
 
 class Robot_Part{
 public:
@@ -71,6 +99,46 @@ public:
     vector <string> weight;
     vector <string> cost;
     vector <string> description;
+   
+    void pop(){
+    name.push_back("Head1");
+    name.push_back("Arm1");
+    name.push_back("Torso1");
+    name.push_back("Locomotor1");
+    name.push_back("battery1");
+
+    number.push_back("123");
+    number.push_back("124");
+    number.push_back("125");
+    number.push_back("126");
+    number.push_back("127");
+
+    type.push_back("Head");
+    type.push_back("Arm");
+    type.push_back("Torso");
+    type.push_back("Locomotor");
+    type.push_back("battery");
+
+    weight.push_back("12.4");
+    weight.push_back("12.5");
+    weight.push_back("20.3");
+    weight.push_back("16.4");
+    weight.push_back("17.4");
+
+    cost.push_back("42.4");
+    cost.push_back("54.5");
+    cost.push_back("21.3");
+    cost.push_back("16.4");
+    cost.push_back("54.3");
+
+    description.push_back("This is a head part");
+    description.push_back("This is a arm part");
+    description.push_back("This is a torso part");
+    description.push_back("This is a locomotor part");
+    description.push_back("This is a battery part");
+
+    }
+
 };
 
 class Robot_Model{
@@ -81,6 +149,7 @@ public:
     vector <string> arm;
     vector <string> locomotor;
     vector <string> battery;
+    vector <string> price;
 };
 
 Robot_Part part;
@@ -89,6 +158,95 @@ Robot_Model model;
 //
 // Robot Part dialog
 //
+
+
+class Prep_Dialog{
+public:
+     Prep_Dialog(){
+
+//       part.pop();
+       
+       dialog = new Fl_Window(340,150, "Prepopulation");
+  
+       box = new Fl_Box(20,40,300,100,"Prepopulation Complete!");
+  
+       p_cancel = new Fl_Button(270, 110, 60, 25, "OK");
+       p_cancel->callback((Fl_Callback *)cancel_prepCB, 0);
+
+
+
+        dialog->end();
+        dialog->set_non_modal();
+    }
+
+    void show() {dialog->show();}
+    void hide() {dialog->hide();}
+    
+
+private:
+    Fl_Window *dialog;
+    Fl_Button *p_cancel;
+    Fl_Box *box;
+   
+};
+
+Prep_Dialog prep;
+
+class Order_Dialog {
+public:
+      Order_Dialog() {
+        dialog = new Fl_Window(340, 270, "Orders");
+
+        o_name = new Fl_Input(120, 10, 210, 25, "Customer Name:");
+        o_name->align(FL_ALIGN_LEFT);
+
+        o_number = new Fl_Input(120, 40, 210, 25, "Order Number:");
+        o_number->align(FL_ALIGN_LEFT);
+
+        o_date = new Fl_Input(120, 70, 210, 25, "Date:");
+        o_date->align(FL_ALIGN_LEFT);
+
+        o_r_name = new Fl_Input(120, 100, 210, 25, "Robot Name:");
+        o_r_name->align(FL_ALIGN_LEFT);
+
+        o_cost = new Fl_Input(120, 130, 210, 25, "Price:");
+        o_cost->align(FL_ALIGN_LEFT);
+
+        o_sa = new Fl_Multiline_Input(120, 160, 210, 75, "Sales Assistant:");
+        o_sa->align(FL_ALIGN_LEFT);
+
+        o_create = new Fl_Return_Button(145, 240, 120, 25, "Create");
+        o_create->callback((Fl_Callback *)create_orderCB, 0);
+
+        o_cancel = new Fl_Button(270, 240, 60, 25, "Cancel");
+        o_cancel->callback((Fl_Callback *)cancel_orderCB, 0);
+
+        dialog->end();
+        dialog->set_non_modal();
+    }
+
+    void show() {dialog->show();}
+    void hide() {dialog->hide();}
+    string name() {return o_name->value();}
+    string number() {return o_number->value();}
+    string date() {return o_date->value();}
+    string r_name() {return o_r_name->value();}
+    string cost() {return o_cost->value();}
+    string sa_name() {return o_sa->value();}
+
+private:
+    Fl_Window *dialog;
+    Fl_Input *o_name;
+    Fl_Input *o_number;
+    Fl_Input *o_date;
+    Fl_Input *o_r_name;
+    Fl_Input *o_cost;
+    Fl_Input *o_sa;
+    Fl_Return_Button *o_create;
+    Fl_Button *o_cancel;
+};
+
+
 class Robot_Model_Dialog{
 public:
     Robot_Model_Dialog(){
@@ -112,6 +270,9 @@ public:
         rm_battery= new Fl_Input(120, 170, 210, 25, "Battery to Use");
         rm_battery->align(FL_ALIGN_LEFT);
         
+        rm_price = new Fl_Input(120, 210, 210, 25, "Price");
+        rm_price->align(FL_ALIGN_LEFT);
+        
         rm_create = new Fl_Return_Button(145, 240, 120, 25, "Create");
         rm_create->callback((Fl_Callback *)create_robot_modelCB, 0);
         
@@ -130,6 +291,7 @@ public:
     string arm() {return rm_arm->value();}
     string torso() {return rm_torso->value();}
     string battery() {return rm_battery->value();}
+    string price(){return rm_price->value();}
     
 private:
     Fl_Window *dialog;
@@ -139,6 +301,7 @@ private:
     Fl_Input *rm_arm;
     Fl_Input *rm_torso;
     Fl_Input *rm_battery;
+    Fl_Input *rm_price;
     Fl_Return_Button *rm_create;
     Fl_Button *rm_cancel;
 };
@@ -207,7 +370,7 @@ public:
         sa_name->align(FL_ALIGN_LEFT);
         
         sa_create = new Fl_Return_Button(145, 100, 120, 25, "Create");
-        //        sa_create->callback((Fl_Callback *)create_saCB, 0);
+        sa_create->callback((Fl_Callback *)create_saCB, 0);
         
         sa_cancel = new Fl_Button(270, 100, 60, 25, "Cancel");
         sa_cancel->callback((Fl_Callback *)cancel_saCB, 0);
@@ -219,7 +382,7 @@ public:
     void show() { dialog->show(); }
     void hide() { dialog->hide(); }
     string SA_name() { return sa_name->value(); }
-    
+    vector <string> name;
 private:
     Fl_Window *dialog;
     Fl_Input *sa_name;
@@ -227,6 +390,8 @@ private:
     Fl_Return_Button *sa_create;
     Fl_Button *sa_cancel;
 };
+
+SalesAssociate_Dialog sales;
 
 class Customer_Dialog {
 public:
@@ -238,7 +403,7 @@ public:
         c_name->align(FL_ALIGN_LEFT);
         
         c_create = new Fl_Return_Button(145, 120, 120, 25, "Create");
-        //c_create->callback((Fl_Callback *)create_custCB, 0);
+        c_create->callback((Fl_Callback *)create_custCB, 0);
         
         c_cancel = new Fl_Button(270, 120, 60, 25, "Cancel");
         c_cancel->callback((Fl_Callback *)cancel_custCB, 0);
@@ -250,7 +415,7 @@ public:
     void show() { dialog->show(); }
     void hide() { dialog->hide(); }
     string cust_name() { return c_name->value(); }
-    
+    vector <string> name;
 private:
     Fl_Window *dialog;
     Fl_Input *c_name;
@@ -258,6 +423,8 @@ private:
     Fl_Return_Button *c_create;
     Fl_Button *c_cancel;
 };
+
+Customer_Dialog customer;
 
 //
 // Callbacks
@@ -267,35 +434,186 @@ int customer_View(Fl_Widget* w, void* p) {
     const int X = 660;
     const int Y = 500;
     const int border = 10;
-    
+    int i = 0,j=0; 
+    string temp;    
+    char* temp1;
+
     custReports = new Fl_Window{ X, Y, "Robot Shoppe" };
     Fl_Text_Buffer *buff = new Fl_Text_Buffer();
     Fl_Text_Display *disp = new Fl_Text_Display(20, 20, 640 - 40, 480 - 40, "Customer List");
     disp->buffer(buff);
     win->resizable(*disp);
     win->show();
-    // buff->text(testing);
+    for(i = 0; i < customer.name.size();i++)
+    {
+         cout << i << endl;
+         temp = temp + "Name: " + customer.name[i] + "\n";
+    }
+    temp1 = new char[temp.length() + 1];
+    strcpy(temp1,temp.c_str());
+    buff->text(temp1);
     
     // Wrap it up and let FLTK do its thing
     custReports->end();
     custReports->show();
     return(Fl::run());
 }
+
+
+
+int model_View(Fl_Widget* w, void* p) {
+    const int X = 660;
+    const int Y = 500;
+    const int border = 10;
+    int i = 0,j=0;
+    string temp;
+    char* temp1;
+
+    custReports = new Fl_Window{ X, Y, "Robot Shoppe" };
+    Fl_Text_Buffer *buff = new Fl_Text_Buffer();
+    Fl_Text_Display *disp = new Fl_Text_Display(20, 20, 640 - 40, 480 - 40, "Model List");
+    disp->buffer(buff);
+    win->resizable(*disp);
+    win->show();
+    for(i = 0; i < model.name.size();i++)
+    {
+         cout << i << endl;
+         temp = temp + "Name: " + model.name[i] + ", Price: " + model.price[i] + "\n";
+    }
+    temp1 = new char[temp.length() + 1];
+    strcpy(temp1,temp.c_str());
+    buff->text(temp1);
+
+    // Wrap it up and let FLTK do its thing
+    custReports->end();
+    custReports->show();
+    return(Fl::run());
+}
+
+
+int order_View(Fl_Widget* w, void* p) {
+    const int X = 660;
+    const int Y = 500;
+    const int border = 10;
+    int i = 0,j=0;
+    string temp;
+    char* temp1;
+
+    custReports = new Fl_Window{ X, Y, "Robot Shoppe" };
+    Fl_Text_Buffer *buff = new Fl_Text_Buffer();
+    Fl_Text_Display *disp = new Fl_Text_Display(20, 20, 640 - 40, 480 - 40, "Order List");
+    disp->buffer(buff);
+    win->resizable(*disp);
+    win->show();
+    for(i = 0; i < o.name.size();i++)
+    {
+         cout << i << endl;
+         temp = temp + "Name: " + o.name[i] + ", Date: "+  o.date[i] +", Price: " + o.cost[i] + ", Sales Assistant: " + o.saname[i] + "\n";
+    }
+    temp1 = new char[temp.length() + 1];
+    strcpy(temp1,temp.c_str());
+    buff->text(temp1);
+
+    // Wrap it up and let FLTK do its thing
+    custReports->end();
+    custReports->show();
+    return(Fl::run());
+}
+
+
+
+
+int manual_View(Fl_Widget* w, void* p) {
+    const int X = 660;
+    const int Y = 500;
+    const int border = 10;
+    int i = 0,j=0;
+    string temp;
+    char* temp1;
+
+    custReports = new Fl_Window{ X, Y, "Robot Shoppe" };
+    Fl_Text_Buffer *buff = new Fl_Text_Buffer();
+    Fl_Text_Display *disp = new Fl_Text_Display(20, 20, 640 - 40, 480 - 40, "Manual");
+    disp->buffer(buff);
+    win->resizable(*disp);
+    win->show();
+    /*for(i = 0; i < model.name.size();i++)
+    {
+         cout << i << endl;
+         temp = temp + "Name: " + model.name[i] + ", Price: " + model.price[i] + "\n";
+    }*/
+    //temp1 = new char[temp.length() + 1];
+    //strcpy(temp1,temp.c_str());
+    buff->text("Prepopulate - Will add premade parts\nCreate Order - Will create an order for a robot model\nCreate Customer - Will create a customer\nCreate Sales Associate -  Will create a sales associate\nCreate Robot Part - Will Create a robot part in the robot shop\nCreate Robot Model - Will create a model using created robot parts\nReport All Orders - Will Print all Orders created\nReport All Customers - Will Print all Customers created\nReport All Sales Associates - Will print all Sales Associates Created\nReport All Robot Models - Will print all Robot Models created\nReport All Robot Parts - Will print all Robot Parts created\n");
+
+    // Wrap it up and let FLTK do its thing
+    custReports->end();
+    custReports->show();
+    return(Fl::run());
+}
+
+int part_View(Fl_Widget* w, void* p) {
+    const int X = 660;
+    const int Y = 500;
+    const int border = 10;
+    int i = 0,j=0;
+    string temp;
+    char* temp1;
+
+    custReports = new Fl_Window{ X, Y, "Robot Shoppe" };
+    Fl_Text_Buffer *buff = new Fl_Text_Buffer();
+    Fl_Text_Display *disp = new Fl_Text_Display(20, 20, 640 - 40, 480 - 40, "Part List");
+    disp->buffer(buff);
+    win->resizable(*disp);
+    win->show();
+    for(i = 0; i < part.name.size();i++)
+    {
+         cout << i << endl;
+         temp = temp + "Name: " + part.name[i] + ", Type: " + part.type[i] + ", Price: " + part.cost[i] + "\n";
+    }
+
+    temp1 = new char[temp.length() + 1];
+    strcpy(temp1,temp.c_str());
+    buff->text(temp1);
+
+    // Wrap it up and let FLTK do its thing
+    custReports->end();
+    custReports->show();
+    return(Fl::run());
+}
+
+
 int sales_View(Fl_Widget* w, void* p) {
     const int X = 660;
     const int Y = 500;
     const int border = 10;
     
     saReports = new Fl_Window{ X, Y, "Robot Shoppe" };
+
+    int i;
+    string temp;
+    char* temp1;
     
+
     Fl_Text_Buffer *buff = new Fl_Text_Buffer();
-    Fl_Text_Display *disp = new Fl_Text_Display(20, 20, 640 - 40, 480 - 40, "Sales Associate List");
+    Fl_Text_Display *disp = new Fl_Text_Display(20, 20, 640 - 40, 480 - 40, "Sales Associate Names");
     disp->buffer(buff);
     win->resizable(*disp);
     win->show();
     // buff->text(testing);
     
     // Wrap it up and let FLTK do its thing
+
+    for(i = 0; i < sales.name.size();i++)
+    {
+         cout << i << endl;
+         temp = temp + "Name: " + sales.name[i] + "\n";
+    }
+
+   temp1 = new char[temp.length() + 1];
+    strcpy(temp1,temp.c_str());
+
+    buff->text(temp1);
     saReports->end();
     saReports->show();
     return(Fl::run());
@@ -372,31 +690,52 @@ void create_robot_modelCB(Fl_Widget* w, void* p){
     
     temp = robot_model_dlg->battery();
     model.battery.push_back(temp);
+   
+    temp = robot_model_dlg->price();
+    model.price.push_back(temp);
     
     
     robot_model_dlg->hide();
     
 }
-/*void create_custCB(Fl_Widget* w, void* p)
+
+void create_custCB(Fl_Widget* w, void* p)
  {
- shop.add_customer(new Customer(cust_dlg->cust_name(), cust_dlg->cust_number(), cust_dlg->sa_number()));
  
+    string temp;
+    cout << "### Storing Name" << endl;
+    cout << "Customer Name    : " << cust_dlg->cust_name() << endl;
+
+    temp = cust_dlg->cust_name();
+    customer.name.push_back(temp);
+
  cust_dlg->hide();
  
  }
- void create_saCB(Fl_Widget* w, void* p)
+
+
+void create_saCB(Fl_Widget* w, void* p)
  {
- shop.add_sa(new SalesAssociate(sa_dlg->SA_name(), sa_dlg->sa_number()));
- 
+  string temp;
+    cout << "### Storing Name" << endl;
+    cout << "Customer Name    : " << sa_dlg->SA_name() << endl;
+
+    temp = sa_dlg->SA_name();
+    sales.name.push_back(temp); 
+
+
  sa_dlg->hide();
  
  }
- */
+ 
 void cancel_robot_modelCB(Fl_Widget* w, void* p){
     robot_model_dlg->hide();
 }
 void menu_create_custCB(Fl_Widget* w, void* p) {
     cust_dlg->show();
+}
+void menu_create_orderCB(Fl_Widget* w, void* p){
+   o_dlg->show();
 }
 void menu_create_saCB(Fl_Widget* w, void* p) {
     sa_dlg->show();
@@ -408,44 +747,70 @@ void cancel_saCB(Fl_Widget* w, void* p) {
     sa_dlg->hide();
 }
 
+
+
+
+
+void create_orderCB(Fl_Widget* w, void* p){
+    string temp;
+    cout << "### Creating order" << endl;
+    cout << "Customer Name    : " << o_dlg->name() << endl;
+    cout << "Order #  : " << o_dlg->number() << endl;
+    cout << "Date  : " << o_dlg->date() << endl;
+    cout << "Robot Name  : " << o_dlg->r_name() << endl;
+    cout << "Price    : " << o_dlg->cost() << endl;
+    cout << "Sales Assistant Name: " << o_dlg->sa_name() << endl;
+    temp = o_dlg->name();
+    o.name.push_back(temp);
+
+    temp = o_dlg->number();
+    o.number.push_back(temp);
+    temp = o_dlg->date();
+    o.date.push_back(temp);
+
+    temp = o_dlg->r_name();
+    o.rname.push_back(temp);
+
+    temp = o_dlg->cost();
+    o.cost.push_back(temp);
+
+    temp = o_dlg->sa_name();
+    o.saname.push_back(temp);
+
+
+    o_dlg->hide();
+}
+void cancel_orderCB(Fl_Widget* w, void* p){
+  o_dlg->hide();
+}
+void menu_create_prepCB(Fl_Widget* w, void* p){
+  part.pop();
+  p_dlg->show();
+}
 //
 // Menu
 //
 
 Fl_Menu_Item menuitems[] = {
     { "&File", 0, 0, 0, FL_SUBMENU },
-    { "&New", FL_ALT + 'n', (Fl_Callback *)CB },
-    { "&Open", FL_ALT + 'o', (Fl_Callback *)CB },
-    { "&Save", FL_ALT + 's', (Fl_Callback *)CB },
-    { "Save As", FL_ALT + 'S', (Fl_Callback *)CB },
-    { "&Quit", FL_ALT + 'q', (Fl_Callback *)CB },
-    { 0 },
-    { "&Edit", 0, 0, 0, FL_SUBMENU },
-    { "&Undo", 0, (Fl_Callback *)CB },
-    { "Cu&t", 0, (Fl_Callback *)CB },
-    { "&Copy", 0, (Fl_Callback *)CB },
-    { "&Paste", 0, (Fl_Callback *)CB },
+    { "&Pre-Populate", FL_ALT + 'q', (Fl_Callback *)menu_create_prepCB },
     { 0 },
     { "&Create", 0, 0, 0, FL_SUBMENU },
-    { "Order", 0, (Fl_Callback *)CB, 0, FL_MENU_DIVIDER  },
+    { "Order", 0, (Fl_Callback *)menu_create_orderCB, 0, FL_MENU_DIVIDER},
     { "Customer", 0, (Fl_Callback *)menu_create_custCB},
     { "Sales Associate", 0, (Fl_Callback *)menu_create_saCB, 0, FL_MENU_DIVIDER  },
     { "Robot Part", 0, (Fl_Callback *)menu_create_robot_partCB },
-    { "Robot Model", 0, (Fl_Callback *)menu_create_robot_modelCB },
+    { "Robot Model", 0, (Fl_Callback *)menu_create_robot_modelCB},
     { 0 },
     { "&Report", 0, 0, 0, FL_SUBMENU },
-    { "Invoice", 0, (Fl_Callback *)CB, 0, FL_MENU_DIVIDER  },
-    { "All Orders", 0, (Fl_Callback *)CB },
-    { "Orders by Customer", 0, (Fl_Callback *)CB },
-    { "Orders by Sales Associate", 0, (Fl_Callback *)CB, 0, FL_MENU_DIVIDER },
+    { "All Orders", 0, (Fl_Callback *)order_View },
     { "All Customers", 0, (Fl_Callback *)customer_View },
     { "All Sales Associates", 0, (Fl_Callback *)sales_View, 0, FL_MENU_DIVIDER  },
-    { "All Robot Models", 0, (Fl_Callback *)CB },
-    { "All Robot Parts", 0, (Fl_Callback *)CB },
+    { "All Robot Models", 0, (Fl_Callback *)model_View },
+    { "All Robot Parts", 0, (Fl_Callback *)part_View },
     { 0 },
     { "&Help", 0, 0, 0, FL_SUBMENU },
-    { "&Manual", 0, (Fl_Callback *)CB},
-    { "&About", 0, (Fl_Callback *)CB},
+    { "&Manual", 0, (Fl_Callback *)manual_View},
     { 0 },
     { 0 }
 };
@@ -456,14 +821,19 @@ int Controller::gui()
     const int Y = 420;
     
     // Create dialogs
+
+    
+
     robot_part_dlg = new Robot_Part_Dialog{};
     robot_model_dlg = new Robot_Model_Dialog{};
     cust_dlg = new Customer_Dialog{};
     sa_dlg = new SalesAssociate_Dialog{};
+    o_dlg = new Order_Dialog{};
+    p_dlg = new Prep_Dialog{};
     
     // Create a window
     win = new Fl_Window{X, Y, "Robbie Robot Shop Manager"};
-    win->color(FL_WHITE);
+    win->color(FL_BLACK);
     
     // Install menu bar
     menubar = new Fl_Menu_Bar(0, 0, X, 30);
@@ -475,201 +845,6 @@ int Controller::gui()
     return(Fl::run());
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void Controller::cli()
-{
-    int cmd = -1;
-    s.ez();
-    while (cmd != 0)
-    {
-        view.show_menu();
-        cout << "Command? ";
-        cin >> cmd;
-        cin.ignore();
-        if(cmd>4)
-        {
-            cerr << "\n**Invalid command**\n*****Try Again*****" << endl;
-        }
-        execute_cmd(cmd);
-    }
-}
-void Controller::execute_cmd(int cmd)
-{
-    int choice=0;
-    string input;
-    
-    if(cmd == 1)//go to pm
-    {
-        pm.menu();
-    }
-    else if(cmd == 2)
-    {
-        int x=3;
-        string input,a = "";
-        while(x >2 || x <1)
-        {
-        view.customer_menu();
-        cin>>x;
-        cin.ignore();
-        if(x==1)
-        {
-            cout<<"Enter Your Name: ";
-            getline(cin,a);
-            
-            c.input_name1(a);
-        }
-        else if(x==2)
-        {
-            int b=0;
-            while(b!=2)
-            {
-            cout<<"Enter your name: ";
-            getline(cin,a);
-            b=c.login(a);
-            
-            if(b==1)
-            {
-                cout<<'\n'<<a<<" is logged in"<<'\n';
-                break;
-            }
-            else
-            {
-                cout<<'\n'<<"Customer is not on file"<<'\n';
-                x=3;
-                break;
-            }
-            }
-
-        }
-        else if(x==0)
-        {
-            break;
-        }
-        else
-        {
-            cerr << "\n**Invalid command**\n*****Try Again*****" << endl;
-        }
-        }
-        while(x!=0)
-        {
-            c.print_menu2();
-            cin>> x;
-            cin.ignore();
-            if(x==1)
-            {
-                pm.printmodels();
-            }
-            else if(x==2)
-            {
-                s.print_cus_order(a);
-            }
-            else if(choice !=0 && (choice>2|| choice<0))
-            {
-                cerr << "\n**Invalid command**\n*****Try Again*****" << endl;
-            }
-        }
-    }
-    
-    else if(cmd == 3)
-    {
-        choice=3;
-        while(choice >2 || choice <1)
-        {
-        view.sales_menu();
-        cin>> choice;
-        cin.ignore();
-        
-        if (choice == 1)
-        {
-            cout<<"Enter Your Name: ";
-            getline(cin,input);
-            s.input_name1(input);
-        }
-        else if(choice == 2)
-        {
-            int b=0;
-            while(b!=2)
-            {
-            cout<<"Enter Your Name: ";
-            getline(cin,input);
-            b=s.login(input);
-            if(b==1)
-            {
-                cout<<'\n'<<input<<" is logged in"<<'\n';
-                break;
-            }
-            else
-            {
-               cout<<'\n'<<"Seller is not on file"<<'\n';
-                choice=3;
-                break;
-            }
-            }
-        }
-        else
-        {
-            cerr << "\n**Invalid command**\n*****Try Again*****" << endl;
-        }
-        }
-        while(choice!=0)
-        {
-            s.menu2();
-            cin>> choice;
-            cin.ignore();
-            if(choice==1)
-            {
-                pm.printmodels();
-                s.create_order(input);
-            }
-            else if(choice==2)
-            {
-                s.print_order(input);
-            }
-            else if(choice !=0 && (choice>2|| choice<0))
-            {
-                cerr << "\n**Invalid command**\n*****Try Again*****" << endl;
-            }
-            
-        }
-    }
-    else if(cmd == 4)
-    {
-        int choice=1;
-        while(choice !=0)
-        {
-        view.boss_menu();
-        cin>>choice;
-        cin.ignore();
-        
-        if(choice==1)
-        {
-            vector<string> models=pm.return_mod_name();
-            vector<double> price=pm.return_mod_price();
-            vector<double> total_cost=pm.return_mod_totalcost();
-            b.mp(models, price, total_cost);
-            
-        }
-        else if(choice==2)
-        {
-            vector<string> models=pm.return_mod_name();
-            vector<string> modnamesold = s.return_model_name();
-            b.totalsold(models, modnamesold);
-        }
-        else if(choice==3)
-        {
-            s.print_all_orders();
-        }
-        else if(choice ==4)
-        {
-            vector<string> seller = s.return_seller();
-            vector<string> quantity_sold= s.return_quantity_sold();
-            b.salesass(seller,quantity_sold);
-        }
-        else if(choice !=0 && (choice>4|| choice<0))
-        {
-            cerr << "\n**Invalid command**\n*****Try Again*****" << endl;
-        }
-        }
-    }
+void cancel_prepCB(Fl_Widget* w, void* p){
+     p_dlg->hide();
 }
